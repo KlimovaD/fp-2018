@@ -1,3 +1,7 @@
+module Task1_1 where
+
+import Todo(todo)
+
 data Term = IntConstant{ intValue :: Int }    
             | Variable{ varName :: String }    
             | Add{ lAdd :: Term, rAdd :: Term } 

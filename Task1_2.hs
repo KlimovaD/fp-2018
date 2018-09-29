@@ -1,3 +1,7 @@
+module Task1_2 where
+
+import Todo(todo)
+
 import Data.Maybe
 
 -- €вл€етс€ ли дата корректной с учЄтом количества дней в мес€це и вискокосных годов?
