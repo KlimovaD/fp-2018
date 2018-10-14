@@ -1,6 +1,11 @@
 module Task1_1 where
 
+{-# LANGUAGE RecordWildCards #-}
+
+
 import Todo(todo)
+import Prelude hiding((<*>)) 
+import qualified Control.Applicative as A
 
 data Term = IntConstant{ intValue :: Int }    
             | Variable{ varName :: String }    
