@@ -1,7 +1,7 @@
-module Task1_1 where
-
 {-# LANGUAGE RecordWildCards #-}
 
+
+module Task1_1 where
 
 import Todo(todo)
 import Prelude hiding((<*>)) 
@@ -40,3 +40,7 @@ evaluate Add{..} = (+) <$> (evaluate lAdd) A.<*> (evaluate rAdd)
 evaluate Sub{..} = (-) <$> (evaluate lSub) A.<*> (evaluate rSub)         
 evaluate Mul{..} = (*) <$> (evaluate lMul) A.<*> (evaluate rMul)         
 evaluate Neg{..} = (negate) <$> (evaluate neg)
+
+main :: IO ()
+main = print $ evaluate $ ((Neg $ IntConstant 5) <*> (IntConstant 3))
+            <+> (IntConstant 20)
