@@ -16,10 +16,10 @@ isDateCorrect d m y = d>0 && m>0 && m<13 && y>=0 && d <=
         else 31)
  
 -- наибольший общий делитель двух чисел
-gcd :: Integer -> Integer -> Integer
-gcd a b | a == b = a
-        | a > b = if a `mod` b == 0 then b else gcd b (a - b)
-        | otherwise = gcd b a
+gcd_ :: Integer -> Integer -> Integer
+gcd_ a b | a == b = a
+        | a > b = if a `mod` b == 0 then b else gcd_ b (a - b)
+        | otherwise = gcd_ b a
 
 --Возведение числа в степень
 pow :: Integer -> Integer -> Integer
