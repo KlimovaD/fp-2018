@@ -24,9 +24,9 @@ gcd a b | a == b = a
 --Возведение числа в степень
 pow :: Integer -> Integer -> Integer
 pow x y | y == 0 = 1
-	 | x == 0 = 0
-	 | y `mod` 2 == 1 = x * pow x (y - 1)
-	 | y `mod` 2 == 0 = pow (x * x) (y `div` 2) 
+ | x == 0 = 0
+ | y `mod` 2 == 1 = x * pow x (y - 1)
+ | y `mod` 2 == 0 = pow (x * x) (y `div` 2) 
 
 -- является ли данное число простым
 isPrime :: Integer -> Bool
