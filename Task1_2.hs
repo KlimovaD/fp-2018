@@ -6,7 +6,7 @@ import Data.Maybe
 
 -- является ли дата корректной с учётом количества дней в месяце и вискокосных годов?
 isDateCorrect :: Int -> Int -> Int -> Bool
-isDateCorrect d m y = d>0 && m>0 && m<13 && y>=0 && d <=
+isDateCorrect d m y = d>0 && m>0 && m<13 && y>=0 && d<=
     (if m `elem` [4,6,9,11] then 30
      else 
         if m == 2 then
@@ -24,9 +24,9 @@ gcd_ a b | a == b = a
 --Возведение числа в степень
 pow :: Integer -> Integer -> Integer
 pow x y | y == 0 = 1
- | x == 0 = 0
- | y `mod` 2 == 1 = x * pow x (y - 1)
- | y `mod` 2 == 0 = pow (x * x) (y `div` 2) 
+        | x == 0 = 0
+        | y `mod` 2 == 1 = x * pow x (y - 1)
+        | y `mod` 2 == 0 = pow (x * x) (y `div` 2) 
 
 -- является ли данное число простым
 isPrime :: Integer -> Bool
