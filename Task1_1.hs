@@ -2,10 +2,14 @@ module Task1_1 where
 
 import Todo(todo)
 
-data Term = IntConstant{ intValue :: Int }          
-            | Variable{ varName :: String }         
-            | BinaryTerm{ lhv :: Term, rhv :: Term } 
+data Operation = Plus | Minus | Multiply
             deriving(Show,Eq)
+
+data Term = IntConstant{ intValue :: Int }           
+            | Variable{ varName :: String }          
+            | BinaryTerm{ lhv :: Term, rhv :: Term, oper :: Operation } 
+            deriving(Show,Eq)
+
 
 infixl 6 |+|
 (|+|) :: Term -> Term -> Term
@@ -22,19 +26,34 @@ infixl 7 |*|
 (|*|) (IntConstant l) (IntConstant r) = IntConstant (l * r)
 (|*|) l r = BinaryTerm l r 
 
+
 replaceVar :: String -> Term -> Term -> Term
-replaceVar varName replacement (IntConstant int) = IntConstant int
-replaceVar varName replacement (Variable var) = if (var == varName) 
-                                                then replacement 
-                                                else Variable var
-replaceVar varName replacement (BinaryTerm l r) = BinaryTerm 
-                                                    (replaceVar varName replacement l) 
-                                                    (replaceVar varName replacement r)
+replaceVar varName replacement expression = case (expression) of
+          Variable var | var == varName -> replacement
+          BinaryTerm lhv rhv oper -> BinaryTerm (replaceVar varName replacement lhv) (replaceVar varName replacement rhv) oper
+          _ -> expression
+
 
 evaluate :: Term -> Term
-evaluate (Variable var) = Variable var
-evaluate (IntConstant int) = IntConstant int
-evaluate (BinaryTerm (IntConstant 0) (IntConstant r)) = IntConstant (r) 
-evaluate (BinaryTerm (IntConstant l) (IntConstant 0)) = IntConstant (l) 
-evaluate (BinaryTerm (IntConstant l) (IntConstant r)) = IntConstant (l + r) 
-evaluate (BinaryTerm l r) = BinaryTerm l r
+evaluate (BinaryTerm l r oper) = 
+    let lhv = evaluate l in
+    let rhv = evaluate r in
+    case oper of
+    Plus -> case (lhv, rhv) of
+        (IntConstant lhv, IntConstant rhv) -> IntConstant (lhv + rhv)
+        (IntConstant 0, rhv) -> rhv
+        (lhv, IntConstant 0) -> lhv
+        otherwise -> BinaryTerm lhv rhv Plus
+    Minus -> case (lhv, rhv) of
+        (IntConstant lhv, IntConstant rhv) -> IntConstant (lhv - rhv)
+        (lhv, IntConstant 0) -> lhv
+        otherwise -> BinaryTerm lhv rhv Minus
+    Multiply -> case (lhv, rhv) of
+        (IntConstant lhv, IntConstant rhv) -> IntConstant (lhv * rhv)
+        (IntConstant 0, rhv) -> IntConstant 0
+        (IntConstant 1, rhv) -> rhv
+        (lhv, IntConstant 0) -> IntConstant 0
+        (lhv, IntConstant 1) -> lhv
+        otherwise -> BinaryTerm lhv rhv Multiply
+    otherwise -> BinaryTerm l r oper
+evaluate expression = expression

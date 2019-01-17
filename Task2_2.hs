@@ -55,7 +55,8 @@ elem w = foldr (\x -> (||) (w == x)) False
 
 -- —писок чисел в диапазоне [from, to) с шагом step
 rangeTo :: Integer -> Integer -> Integer -> Integer
-rangeTo from to step = foldl (\ acc x -> if (x `mod` step == z) then acc ++ [x] else acc) [] [from..to-1] where z=from `mod` step
+rangeTo from to step = foldl (\ acc x -> if (x `mod` step == z) then acc ++ [x] else acc) [] [from..to-1] 
+ where z=from `mod` step
 
 --  онкатенаци€ двух списков
 append :: [a] -> [a] -> [a]
@@ -65,4 +66,5 @@ append list1 list2 = foldr (\h t -> h:t) list2 list1
 -- –азбиение списка lst на куски размером n
 -- (последний кусок может быть меньше)
 groups :: [a] -> Integer -> [[a]]
-groups lst n = let (l,y,_)= foldl (\(r,a,i) x -> if i == n then (reverse a:r,[x],1) else (r,x:a,i+1)) ([],[],0) lst in reverse $ reverse y : l
+groups lst n = let (l,y,_)= foldl (\(r,a,i) x -> if i == n then (reverse a:r,[x],1) else (r,x:a,i+1)) ([],[],0) lst 
+ in reverse $ reverse y : l
