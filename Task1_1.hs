@@ -14,17 +14,17 @@ data Term = IntConstant{ intValue :: Int }
 infixl 6 |+|
 (|+|) :: Term -> Term -> Term
 (|+|) (IntConstant l) (IntConstant r) = IntConstant (l + r)
-(|+|) l r = BinaryTerm l r 
+(|+|) l r = BinaryTerm l r Plus 
 
 infixl 6 |-|
 (|-|) :: Term -> Term -> Term
 (|-|) (IntConstant l) (IntConstant r) = IntConstant (l - r)
-(|-|) l r = BinaryTerm l r 
+(|-|) l r = BinaryTerm l r Minus 
 
 infixl 7 |*|
 (|*|) :: Term -> Term -> Term
 (|*|) (IntConstant l) (IntConstant r) = IntConstant (l * r)
-(|*|) l r = BinaryTerm l r 
+(|*|) l r = BinaryTerm l r Multiply
 
 
 replaceVar :: String -> Term -> Term -> Term

@@ -26,41 +26,32 @@ list2dlist lst = list2dlist' DNil lst
 list2dlist' :: DList a -> [a] -> DList a
 list2dlist' _ [] = DNil
 list2dlist' left (h: t) = 
-    let rec = DCons left h (list2dlist' rec t)
-    in rec
+         let rec = DCons left h (list2dlist' rec t)
+         in rec
 
 index :: DList a -> Int -> a
-index dlst i = case (i, dlst) of
-    (0, (DCons _ v _)) -> v
-    (_, (DCons _ _ r)) -> index r (i - 1)
-    otherwise -> error(":(") 
+index (DCons l c r) i | i < 0 = error "negative index"
+             | otherwise = if i == 0 then c else index r (i-1)
+                         
     
 
-insertAt :: DList a -> Int -> a -> DList a
-insertAt DNil index value = case (index) of 
-    0 -> DCons DNil value DNil
-    _ -> error(":(")
-insertAt (DCons l v r) index value = case (r , index) of
-    (_, 1) -> let rec = DCons l v (insertAt' rec r value)
-              in rec
-    (_, 0) -> let rec = DCons DNil value (insertAt' rec r v)
-              in rec
-    (DNil, i) | i /= 1 -> error(":(")
-    _ -> DCons l v (insertAt r (index - 1) value)
 
-insertAt' :: DList a -> DList a -> a -> DList a
-insertAt' left right value = case (right) of
-    (DCons l' v' r') -> let rec = DCons left value (insertAt' rec r' v') in rec
-    DNil -> DCons left value DNil
+insertAt :: DList a -> Int -> a -> DList a
+insertAt _ i _  | i < 0 = error "negative index"
+insertAt DNil _ el  = DCons DNil el DNil
+insertAt (DCons l c r) 0 el = insert' where
+        insert' = DCons l el (DCons insert' c r)
+insertAt (DCons l c DNil) i el = insert' where
+        insert' = DCons l c (DCons insert' el DNil)
+insertAt (DCons l c r) i el = DCons l c (insertAt r (i-1) el)
+
+
 
 removeAt :: DList a -> Int -> DList a
-removeAt DNil index = error(":(")
-removeAt (DCons l v r)  index = case (r , index) of
-    ((DCons l' v' r'), 0) -> case (r') of 
-                                (DCons _ v'' r'') -> let rec = DCons l v' (insertAt' rec r'' v'')
-                                                     in rec
-                                (DNil)            -> DCons l v' DNil               
-    (DNil,             0) -> let rec = DNil
-                             in rec
-    (DNil,             i) | i /= 0 -> error(":(")
-    (_,                i) -> DCons l v (removeAt r (index - 1))
+removeAt _ i | i < 0 = error "negative index"
+removeAt DNil _ = DNil
+removeAt (DCons DNil c (DCons l c' r)) 0 = DCons DNil c' r
+removeAt (DCons _ c DNil) i | i == 0 = DNil
+removeAt (DCons (DCons ll lc lr) c (DCons rl rc rr)) 0 = remove' where
+        remove' = DCons (DCons ll lc remove') rc rr
+removeAt (DCons l c r) i = DCons l c (removeAt r (i - 1))

@@ -47,7 +47,7 @@ diagonal = reverse . fst . foldl(\(r,c) s -> ((s !! c):r,c+1)) ([],0)
 -- Фильтр для всех элементов, не соответствующих предикату
 filterNot :: (a -> Bool) -> [a] -> [a]
 filterNot _ [] = []
-filterNot f list = foldr (\h t -> if (f h) then (h:t) else t) [] list
+filterNot f list = foldr (\h t -> if (f h) then t else (h:t)) [] list
 
 -- Поиск элемента в списке
 elem :: (Eq a) => a -> [a] -> Bool
